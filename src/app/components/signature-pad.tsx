@@ -9,7 +9,7 @@ import { ModeToggle } from "./mode_toggle";
 
 export default function SignaturePadComponent() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const sigPadRef = useRef<SignaturePad>();
+  const sigPadRef = useRef<SignaturePad>(null);
   const [name, setName] = useState("");
   const [purpose, setPurpose] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
@@ -20,7 +20,6 @@ export default function SignaturePadComponent() {
     width: 600,
     height: 300,
   });
-  console.log("update");
   useEffect(() => {
     // handler for window resize
     const handleResize = () => {
