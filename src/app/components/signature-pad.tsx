@@ -1,11 +1,10 @@
 "use client";
-import React, { useLayoutEffect, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SignaturePad from "signature_pad";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 import { ModeToggle } from "./mode_toggle";
 
 export default function SignaturePadComponent() {
