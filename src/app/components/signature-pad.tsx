@@ -20,6 +20,7 @@ export default function SignaturePadComponent() {
     width: 600,
     height: 300,
   });
+  console.log("update");
   useEffect(() => {
     // handler for window resize
     const handleResize = () => {
