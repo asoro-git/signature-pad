@@ -42,21 +42,16 @@ export default function SignaturePadComponent() {
   }, []); // initialise signature pad
   useEffect(() => {
     if (canvasRef.current) {
-      const pad = new SignaturePad(canvasRef.current, {
+      sigPadRef.current = new SignaturePad(canvasRef.current, {
         penColor: "#000",
         backgroundColor: "rgba(0,0,0,0)",
+        onBegin: () => {
+          setLeftMostX(null);
+        },
+        onEnd: () => {
+          //stroke finished
+        },
       });
-
-      // Handle device pixel rati
-      sigPadRef.current = pad;
-
-      // track left-most
-      pad.onBegin = () => {
-        setLeftMostX(null);
-      };
-      pad.onEnd = () => {
-        // no-op
-      };
     }
   }, []); // Reinit on dimension changes
 
