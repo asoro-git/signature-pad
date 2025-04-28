@@ -1,7 +1,7 @@
 import "signature_pad";
 
 declare module "signature_pad" {
-  interface SignaturePadOptions {
+  interface Options {
     onBegin?: () => void;
     onEnd?: () => void;
   }
