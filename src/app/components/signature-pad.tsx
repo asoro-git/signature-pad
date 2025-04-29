@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ModeToggle } from "./mode_toggle";
+import { ModeToggle } from "@/app/components/mode_toggle";
+import { handleStamp } from "@/app/utils/handleStamp";
 
 export default function SignaturePadComponent() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -15,19 +16,20 @@ export default function SignaturePadComponent() {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [leftMostX, setLeftMostX] = useState<number | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const [canvasSize, setCanvasSize] = useState({
     width: 600,
-    height: 300,
+    height: 200,
   });
   useEffect(() => {
     // handler for window resize
     const handleResize = () => {
       const w = window.innerWidth * 0.6; // viewport width in px :contentReference[oaicite:0]{index=0}
-      const h = window.innerHeight / 3; // viewport height in px :contentReference[oaicite:1]{index=1}
 
       setCanvasSize((prev) =>
-        prev.width === w && prev.height === h ? prev : { width: w, height: h },
+        prev.width === w ? prev : { width: w, height: 200 },
       );
     };
 
@@ -106,8 +108,31 @@ export default function SignaturePadComponent() {
     const dataUrl = fullCanvas.toDataURL("image/png");
     const link = document.createElement("a");
     link.href = dataUrl;
-    link.download = "signature.png";
+    link.download = date + "signature.png";
     link.click();
+  };
+
+  // when the user picks a file…
+  const onFileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    setSelectedFile(file);
+  };
+
+  // trigger the hidden input
+  const openFilePicker = () => {
+    fileInputRef.current?.click();
+  };
+
+  // only runs when they click “Stamp PDF”
+  const onStampClick = async (): Promise<void> => {
+    if (!selectedFile || !sigPadRef.current) return;
+    const blob = await handleStamp(selectedFile, sigPadRef.current, name, date);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${date}_${name}_signed service agreement.pdf`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -141,12 +166,19 @@ export default function SignaturePadComponent() {
             style={{ margin: "auto" }}
             className="border rounded"
           />
+          <Input
+            type="file"
+            accept=".pdf"
+            name="pdf"
+            onChange={onFileSelected}
+            className="hidden"
+            ref={fileInputRef}
+          />
           <br />
           <div className="flex space-x-2 justify-center">
             <Button variant="outline" onClick={clear} className="rounded">
               Clear
             </Button>
-            <Button onClick={save}>Save</Button>
           </div>
           <br />
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -178,12 +210,35 @@ export default function SignaturePadComponent() {
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="my-2"
+                className="my-2 !appearance-auto"
               />
             </div>
           </div>
+          <br />
+          {/* button to open file picker */}
+          <div className="flex justify-center space-x-2">
+            <Button variant="default" onClick={openFilePicker}>
+              {selectedFile ? selectedFile.name : "Select PDF"}
+            </Button>
+
+            {/* only enabled once a file’s picked */}
+            <Button
+              onClick={onStampClick}
+              variant="secondary"
+              disabled={!selectedFile}
+            >
+              Sign PDF
+            </Button>
+            <Button onClick={save} variant="outline">
+              Save Signature Only
+            </Button>
+            <br />
+          </div>
         </CardContent>
       </Card>
+      <div className="flex justify-center item-end h-full text-xs text-slate-400">
+        <div> © Copyright {new Date().toISOString().slice(0, 4)} Stanley</div>
+      </div>
     </div>
   );
 }
