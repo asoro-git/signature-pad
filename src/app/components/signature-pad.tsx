@@ -218,16 +218,18 @@ export default function SignaturePadComponent() {
           {/* button to open file picker */}
           <div className="flex justify-center space-x-2">
             <Button variant="default" onClick={openFilePicker}>
-              {selectedFile ? selectedFile.name : "Select PDF"}
+              {selectedFile
+                ? selectedFile.name
+                : "Select Service Agreement (SA)"}
             </Button>
 
             {/* only enabled once a file’s picked */}
             <Button
               onClick={onStampClick}
-              variant="secondary"
+              variant="default"
               disabled={!selectedFile}
             >
-              Sign PDF
+              Sign SA
             </Button>
             <Button onClick={save} variant="outline">
               Save Signature Only
