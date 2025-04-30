@@ -14,7 +14,11 @@ export default function SignaturePadComponent() {
   const [name, setName] = useState("");
   // const [purpose, setPurpose] = useState("");
   const [clientName, setClientName] = useState("");
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [date, setDate] = useState(new Date().toLocaleString('en-AU', {
+  year: 'numeric',
+  month: 'short',
+  day: '2-digit',
+}););
   const [leftMostX, setLeftMostX] = useState<number | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -255,7 +259,11 @@ export default function SignaturePadComponent() {
                 id="date"
                 type="date"
                 value={date}
-                onChange={(e) => setDate(e.target.value)}
+                onChange={(e) => setDate(new Date(e.target.toLocaleString('en-AU', {
+  year: 'numeric',
+  month: 'short',
+  day: '2-digit',
+}))};
                 className="my-2"
               />
             </div>
@@ -290,7 +298,9 @@ export default function SignaturePadComponent() {
         </CardContent>
       </Card>
       <div className="flex justify-center item-end h-full text-xs text-slate-400">
-        <div> © Copyright {new Date().toISOString().slice(0, 4)} Stanley</div>
+        <div> © Copyright {new Date().toLocaleString('en-AU', {
+  year: 'numeric',
+});} Stanley</div>
       </div>
     </div>
   );
