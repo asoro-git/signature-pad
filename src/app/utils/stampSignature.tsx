@@ -53,22 +53,22 @@ export async function stampSignature(
           font: timesRoman,
           color: rgb(0, 0, 0),
         });
-        for (let i = 50; i < 1000; i += 20) {
-          page.drawText(i.toString(), {
-            x: 420,
-            y: height - i,
-            size: 11,
-            font: timesRoman,
-            color: rgb(0, 0, 0),
-          });
-          page.drawText(i.toString(), {
-            x: i,
-            y: height - 265,
-            size: 11,
-            font: timesRoman,
-            color: rgb(0, 0, 0),
-          });
-        }
+        // for (let i = 50; i < 1000; i += 20) {
+        //   page.drawText(i.toString(), {
+        //     x: 420,
+        //     y: height - i,
+        //     size: 11,
+        //     font: timesRoman,
+        //     color: rgb(0, 0, 0),
+        //   });
+        //   page.drawText(i.toString(), {
+        //     x: i,
+        //     y: height - 265,
+        //     size: 11,
+        //     font: timesRoman,
+        //     color: rgb(0, 0, 0),
+        //   });
+        // }
       } else if (signName === clientName || clientName === "") {
         page.drawText(`${signDate} (YYYY-MM-DD)`, {
           x: 85,
