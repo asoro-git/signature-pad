@@ -18,7 +18,7 @@ export default function SignaturePadComponent() {
   year: 'numeric',
   month: 'short',
   day: '2-digit',
-}););
+}));
   const [leftMostX, setLeftMostX] = useState<number | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
