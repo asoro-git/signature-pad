@@ -111,7 +111,7 @@ export default function SignaturePadComponent() {
     const dataUrl = fullCanvas.toDataURL("image/png");
     const link = document.createElement("a");
     link.href = dataUrl;
-    link.download = date + "signature.png";
+    link.download = name + "_" + date + "_" + "signature.png";
     link.click();
   };
 
