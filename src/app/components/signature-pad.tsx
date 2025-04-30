@@ -254,8 +254,7 @@ export default function SignaturePadComponent() {
                 type="date"
                 value={date}
                 onChange={(e) => setDate(
-                  new Date(Date.now() - new Date().getTimezoneOffset()*60000)
-                    .toISOString().slice(0,10)
+                  e.target.value
                 )}
                 className="my-2"
               />
