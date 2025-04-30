@@ -300,7 +300,7 @@ export default function SignaturePadComponent() {
       <div className="flex justify-center item-end h-full text-xs text-slate-400">
         <div> © Copyright {new Date().toLocaleString('en-AU', {
   year: 'numeric',
-});} Stanley</div>
+})} Stanley</div>
       </div>
     </div>
   );
