@@ -12,7 +12,7 @@ export default function SignaturePadComponent() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sigPadRef = useRef<SignaturePad>(null);
   const [name, setName] = useState("");
-  const [purpose, setPurpose] = useState("");
+  // const [purpose, setPurpose] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [leftMostX, setLeftMostX] = useState<number | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -100,7 +100,7 @@ export default function SignaturePadComponent() {
     ctx.fillText(`Name: ${name}`, textX, startY);
     ctx.fillText(`Date signed: ${date}`, textX, startY + 20);
     ctx.fillText(
-      `Purpose: ${purpose || `Service Agreement Signature`}`,
+      `Purpose: ${`Service Agreement Signature`}`, //purpose var is not used here
       textX,
       startY + 40,
     );
@@ -183,7 +183,7 @@ export default function SignaturePadComponent() {
           <br />
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="flex flex-col">
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name">Signer Name</Label>
               <Input
                 id="name"
                 value={name}
@@ -192,19 +192,19 @@ export default function SignaturePadComponent() {
                 className="my-2"
               />
             </div>
-            <div className="flex flex-col">
-              <Label htmlFor="purpose">Purpose</Label>
-
-              <Input
-                id="purpose"
-                value={purpose}
-                onChange={(e) => setPurpose(e.target.value)}
-                placeholder="Signature purpose"
-                className="my-2"
-              />
-            </div>
-            <div className="flex flex-col">
-              <Label htmlFor="date">Date</Label>
+            {/* <div className="flex flex-col"> */}
+            {/*   <Label htmlFor="purpose">Purpose</Label> */}
+            {/**/}
+            {/*   <Input */}
+            {/*     id="purpose" */}
+            {/*     value={purpose} */}
+            {/*     onChange={(e) => setPurpose(e.target.value)} */}
+            {/*     placeholder="Signature purpose" */}
+            {/*     className="my-2" */}
+            {/*   /> */}
+            {/* </div> */}
+            <div className="flex flex-col col-span-2">
+              <Label htmlFor="date">Sign Date</Label>
               <Input
                 id="date"
                 type="date"
@@ -216,24 +216,29 @@ export default function SignaturePadComponent() {
           </div>
           <br />
           {/* button to open file picker */}
-          <div className="flex justify-center space-x-2">
-            <Button variant="default" onClick={openFilePicker}>
-              {selectedFile
-                ? selectedFile.name
-                : "Select Service Agreement (SA)"}
-            </Button>
-
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
+            <div className="flex flex-col col-span-3">
+              <Button variant="default" onClick={openFilePicker}>
+                {selectedFile
+                  ? selectedFile.name
+                  : "Select Service Agreement (SA)"}
+              </Button>
+            </div>
             {/* only enabled once a file’s picked */}
-            <Button
-              onClick={onStampClick}
-              variant="default"
-              disabled={!selectedFile}
-            >
-              Sign SA
-            </Button>
-            <Button onClick={save} variant="outline">
-              Save Signature Only
-            </Button>
+            <div className="flex flex-col">
+              <Button
+                onClick={onStampClick}
+                variant="default"
+                disabled={!selectedFile}
+              >
+                Sign SA
+              </Button>
+            </div>
+            <div className="flex flex-col col-span-4">
+              <Button onClick={save} variant="outline">
+                Save Signature Only
+              </Button>
+            </div>
             <br />
           </div>
         </CardContent>

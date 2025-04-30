@@ -16,7 +16,7 @@ export default function RootLayout({
       <body className={`${playfair.variable} font-sans`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem={true}
         >
           {children}
