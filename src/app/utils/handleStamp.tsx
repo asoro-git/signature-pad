@@ -5,6 +5,7 @@ export async function handleStamp(
   file: File,
   canvas: SignaturePad,
   signName: string,
+  clientName: string,
   signDate: string,
 ): Promise<Blob> {
   const arrayBuffer = await file.arrayBuffer();
@@ -13,6 +14,7 @@ export async function handleStamp(
     arrayBuffer,
     sigDataUrl,
     signName,
+    clientName,
     signDate,
   );
 

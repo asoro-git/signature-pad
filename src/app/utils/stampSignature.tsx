@@ -4,6 +4,7 @@ export async function stampSignature(
   pdfBytes: ArrayBuffer,
   signatureDataUrl: string,
   signName: string,
+  clientName: string,
   signDate: string,
 ): Promise<Uint8Array> {
   // Load the existing PDF
@@ -31,35 +32,58 @@ export async function stampSignature(
     const timesRoman = await pdfDoc.embedFont(StandardFonts.TimesRoman);
     console.log(sigWidth, sigHeight);
     if (idx === 10) {
-      page.drawImage(sigImg, {
-        x: 96,
-        y: height - 452,
-        width: sigWidth,
-        height: sigHeight,
-      });
-      page.drawText(`${signName}`, {
-        x: 96,
-        y: height - 392,
-        size: 12,
-        font: timesRoman,
-        color: rgb(0, 0, 0),
-      });
-      page.drawText(`${signDate} (YYYY-MM-DD)`, {
-        x: 96,
-        y: height - 417,
-        size: 11,
-        font: timesRoman,
-        color: rgb(0, 0, 0),
-      });
-      // for (let i = 450; i < 499; i += 10) {
-      //   page.drawText(i.toString(), {
-      //     x: 420,
-      //     y: height - i,
-      //     size: 11,
-      //     font: timesRoman,
-      //     color: rgb(0, 0, 0),
-      //   });
-      // }
+      if (clientName !== signName && clientName !== "") {
+        page.drawImage(sigImg, {
+          x: 96,
+          y: height - 452,
+          width: sigWidth,
+          height: sigHeight,
+        });
+        page.drawText(`${signName}`, {
+          x: 96,
+          y: height - 392,
+          size: 12,
+          font: timesRoman,
+          color: rgb(0, 0, 0),
+        });
+        page.drawText(`${signDate} (YYYY-MM-DD)`, {
+          x: 96,
+          y: height - 417,
+          size: 11,
+          font: timesRoman,
+          color: rgb(0, 0, 0),
+        });
+        for (let i = 50; i < 1000; i += 20) {
+          page.drawText(i.toString(), {
+            x: 420,
+            y: height - i,
+            size: 11,
+            font: timesRoman,
+            color: rgb(0, 0, 0),
+          });
+          page.drawText(i.toString(), {
+            x: i,
+            y: height - 265,
+            size: 11,
+            font: timesRoman,
+            color: rgb(0, 0, 0),
+          });
+        }
+      } else if (signName === clientName || clientName === "") {
+        page.drawText(`${signDate} (YYYY-MM-DD)`, {
+          x: 85,
+          y: height - 270,
+          size: 11,
+          font: timesRoman,
+          color: rgb(0, 0, 0),
+        });
+        page.drawImage(sigImg, {
+          x: 96,
+          y: height - 331,
+          width: sigWidth,
+          height: sigHeight,
+        });
+      }
     }
     if (idx === 13) {
       page.drawImage(sigImg, {
@@ -77,9 +101,18 @@ export async function stampSignature(
       });
     }
   }
-  pdfDoc.setTitle(signDate + "_Service Agreement" + "_Signed", {
-    showInWindowTitleBar: true,
-  });
+  pdfDoc.setTitle(
+    `${signDate}_${
+      clientName === signName
+        ? clientName
+        : clientName === ""
+          ? signName
+          : clientName
+    }_Service Agreement_Signed`,
+    {
+      showInWindowTitleBar: true,
+    },
+  );
   // Serialize to bytes
   return await pdfDoc.save();
 }

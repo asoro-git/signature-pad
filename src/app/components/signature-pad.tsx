@@ -13,6 +13,7 @@ export default function SignaturePadComponent() {
   const sigPadRef = useRef<SignaturePad>(null);
   const [name, setName] = useState("");
   // const [purpose, setPurpose] = useState("");
+  const [clientName, setClientName] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [leftMostX, setLeftMostX] = useState<number | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -23,6 +24,7 @@ export default function SignaturePadComponent() {
     width: 600,
     height: 200,
   });
+
   useEffect(() => {
     // handler for window resize
     const handleResize = () => {
@@ -42,6 +44,7 @@ export default function SignaturePadComponent() {
     // cleanup on unmount
     return () => window.removeEventListener("resize", handleResize);
   }, []); // initialise signature pad
+
   useEffect(() => {
     if (canvasRef.current) {
       sigPadRef.current = new SignaturePad(canvasRef.current, {
@@ -97,7 +100,7 @@ export default function SignaturePadComponent() {
     ctx.textBaseline = "top";
     const textX = leftMostX !== null ? leftMostX : 10;
     const startY = signatureCanvas.height + 10;
-    ctx.fillText(`Name: ${name}`, textX, startY);
+    ctx.fillText(`Signer Name: ${name}`, textX, startY);
     ctx.fillText(`Date signed: ${date}`, textX, startY + 20);
     ctx.fillText(
       `Purpose: ${`Service Agreement Signature`}`, //purpose var is not used here
@@ -126,11 +129,21 @@ export default function SignaturePadComponent() {
   // only runs when they click “Stamp PDF”
   const onStampClick = async (): Promise<void> => {
     if (!selectedFile || !sigPadRef.current) return;
-    const blob = await handleStamp(selectedFile, sigPadRef.current, name, date);
+    const nameTrimmed = name.trim();
+    const clientNameTrimmed = clientName.trim();
+    setName(nameTrimmed);
+    setClientName(clientNameTrimmed);
+    const blob = await handleStamp(
+      selectedFile,
+      sigPadRef.current,
+      nameTrimmed,
+      clientNameTrimmed,
+      date,
+    );
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `${date}_${name}_signed service agreement.pdf`;
+    a.download = `${date}_${name === clientName ? name : clientName === "" ? name : clientName}_signed service agreement.pdf`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -187,30 +200,63 @@ export default function SignaturePadComponent() {
               <Input
                 id="name"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Enter name (relationship/self)"
+                onChange={(e) =>
+                  setName(
+                    e.target.value
+                      .split(/\s+/)
+                      .map((word) =>
+                        word
+                          .split(/([-'])/)
+                          .map((part) =>
+                            /^[a-zA-Z]/.test(part)
+                              ? part.slice(0, 1).toUpperCase() +
+                                part.slice(1).toLowerCase()
+                              : part,
+                          )
+                          .join(""),
+                      )
+                      .join(" "),
+                  )
+                }
+                placeholder="Representative name"
                 className="my-2"
               />
             </div>
-            {/* <div className="flex flex-col"> */}
-            {/*   <Label htmlFor="purpose">Purpose</Label> */}
-            {/**/}
-            {/*   <Input */}
-            {/*     id="purpose" */}
-            {/*     value={purpose} */}
-            {/*     onChange={(e) => setPurpose(e.target.value)} */}
-            {/*     placeholder="Signature purpose" */}
-            {/*     className="my-2" */}
-            {/*   /> */}
-            {/* </div> */}
-            <div className="flex flex-col col-span-2">
+            <div className="flex flex-col">
+              <Label htmlFor="clientName">Client Name</Label>
+              <Input
+                id="clientName"
+                value={clientName}
+                onChange={(e) =>
+                  setClientName(
+                    e.target.value
+                      .split(/\s+/)
+                      .map((word) =>
+                        word
+                          .split(/([-'])/)
+                          .map((part) =>
+                            /^[a-zA-Z]/.test(part)
+                              ? part.slice(0, 1).toUpperCase() +
+                                part.slice(1).toLowerCase()
+                              : part,
+                          )
+                          .join(""),
+                      )
+                      .join(" "),
+                  )
+                }
+                placeholder="Client Name (Empty if same)"
+                className="my-2"
+              />
+            </div>
+            <div className="flex flex-col">
               <Label htmlFor="date">Sign Date</Label>
               <Input
                 id="date"
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="my-2 !appearance-auto"
+                className="my-2"
               />
             </div>
           </div>
