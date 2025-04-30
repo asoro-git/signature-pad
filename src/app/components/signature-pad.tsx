@@ -307,5 +307,6 @@ export default function SignaturePadComponent() {
 })} Stanley
        </div>
       </div>
+     </div>
   );
 }
