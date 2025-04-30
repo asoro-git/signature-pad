@@ -181,7 +181,7 @@ export default function SignaturePadComponent() {
             </Button>
           </div>
           <br />
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             <div className="flex flex-col">
               <Label htmlFor="name">Signer Name</Label>
               <Input
