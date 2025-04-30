@@ -14,13 +14,8 @@ export default function SignaturePadComponent() {
   const [name, setName] = useState("");
   // const [purpose, setPurpose] = useState("");
   const [clientName, setClientName] = useState("");
-  const [date, setDate] = useState(new Date()
-.toLocaleString('en-AU', 
-{
-  year: 'numeric',
-  month: 'short',
-  day: '2-digit',
-}));
+  const [date, setDate] = useState(new Date(Date.now() - new Date().getTimezoneOffset()*60000)
+                    .toISOString().slice(0,10));
   const [leftMostX, setLeftMostX] = useState<number | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -155,10 +150,7 @@ export default function SignaturePadComponent() {
   };
 
   return (
-    <div
-      className="flex flex-col justify-center items-center space-y-4 p-9"
-      style={{ fontFamily: "'Playfair Display', monospace" }}
-    >
+    <div className="flex flex-col justify-center items-center space-y-4 p-9" style={{ fontFamily: "'Playfair Display', monospace" }}>
       <Card ref={cardRef} className="w-full max-w-3xl min-w-60 p-6">
         <CardHeader className="flex flex-col justify-center items-center">
           <CardTitle
@@ -261,11 +253,10 @@ export default function SignaturePadComponent() {
                 id="date"
                 type="date"
                 value={date}
-                onChange={(e) => setDate(new Date(e.target.value).toLocaleString('en-AU', {
-  year: 'numeric',
-  month: 'short',
-  day: '2-digit',
-}))};
+                onChange={(e) => setDate(
+                  new Date(Date.now() - new Date().getTimezoneOffset()*60000)
+                    .toISOString().slice(0,10);
+                )}
                 className="my-2"
               />
             </div>
