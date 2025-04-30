@@ -14,7 +14,9 @@ export default function SignaturePadComponent() {
   const [name, setName] = useState("");
   // const [purpose, setPurpose] = useState("");
   const [clientName, setClientName] = useState("");
-  const [date, setDate] = useState(new Date().toLocaleString('en-AU', {
+  const [date, setDate] = useState(new Date()
+.toLocaleString('en-AU', 
+{
   year: 'numeric',
   month: 'short',
   day: '2-digit',
@@ -298,10 +300,12 @@ export default function SignaturePadComponent() {
         </CardContent>
       </Card>
       <div className="flex justify-center item-end h-full text-xs text-slate-400">
-        <div> © Copyright {new Date().toLocaleString('en-AU', {
+        <div> © Copyright {new Date()
+.toLocaleString('en-AU',
+{
   year: 'numeric',
-})} Stanley</div>
+})} Stanley
+       </div>
       </div>
-    </div>
   );
 }
