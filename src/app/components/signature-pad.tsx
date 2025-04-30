@@ -261,7 +261,7 @@ export default function SignaturePadComponent() {
                 id="date"
                 type="date"
                 value={date}
-                onChange={(e) => setDate(new Date(e.target.toLocaleString('en-AU', {
+                onChange={(e) => setDate(new Date(e.target.value).toLocaleString('en-AU', {
   year: 'numeric',
   month: 'short',
   day: '2-digit',
