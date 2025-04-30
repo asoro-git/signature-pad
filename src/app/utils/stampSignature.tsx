@@ -46,7 +46,7 @@ export async function stampSignature(
           font: timesRoman,
           color: rgb(0, 0, 0),
         });
-        page.drawText(`${signDate} (YYYY-MM-DD)`, {
+        page.drawText(`${signDate}`, {
           x: 96,
           y: height - 417,
           size: 11,
@@ -70,7 +70,7 @@ export async function stampSignature(
         //   });
         // }
       } else if (signName === clientName || clientName === "") {
-        page.drawText(`${signDate} (YYYY-MM-DD)`, {
+        page.drawText(`${signDate}`, {
           x: 85,
           y: height - 270,
           size: 11,
@@ -92,7 +92,7 @@ export async function stampSignature(
         width: sigWidth,
         height: sigHeight,
       });
-      page.drawText(`${signDate} (YYYY-MM-DD)`, {
+      page.drawText(`${signDate}`, {
         x: 100,
         y: height - 700,
         size: 12,
