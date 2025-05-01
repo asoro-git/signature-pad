@@ -127,7 +127,7 @@ export default function SignaturePadComponent() {
       canvas.removeEventListener("pointerdown", updateLeft);
       canvas.removeEventListener("pointermove", updateLeft);
       canvas.removeEventListener("pointerup", localSave);
-      canvas.addEventListener("pointermove", localSave);
+      canvas.removeEventListener("pointermove", localSave);
     };
   }, [leftMostX]);
 
