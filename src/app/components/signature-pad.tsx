@@ -26,37 +26,59 @@ export default function SignaturePadComponent() {
   });
 
   useEffect(() => {
-    // handler for window resize
     const handleResize = () => {
-      const w = window.innerWidth * 0.6; // viewport width in px :contentReference[oaicite:0]{index=0}
+      const sigPad = sigPadRef.current!;
+      const w = window.innerWidth * 0.6;
+      const h = 200;
 
-      setCanvasSize((prev) =>
-        prev.width === w ? prev : { width: w, height: 200 },
-      );
+      // 2) Grab the old signature data
+      if (sigPad) {
+        const oldDatas = sigPad.toData();
+        // 3) Scale it
+        for (const oldData of oldDatas) {
+          oldData.points = oldData.points.map((point) => ({
+            x: (point.x =
+              canvasSize.width > w
+                ? point.x - Math.abs((canvasSize.width - w) * 0.25)
+                : point.x + Math.abs((canvasSize.width - w) * 0.25)),
+            y: point.y,
+            time: point.time,
+            pressure: point.pressure,
+          }));
+        }
+        // 4) Replay the scaled strokes
+        sigPadRef.current!.fromData(oldDatas);
+      }
+      // 5) Resize the actual <canvas>
+      setCanvasSize({ width: w, height: h });
+      requestAnimationFrame(() => {
+        /* no-op: just forces a paint */
+      });
     };
 
-    // listen for resize
-    window.addEventListener("resize", handleResize); // :contentReference[oaicite:2]{index=2}
-
-    // call once to initialise
+    window.addEventListener("resize", handleResize);
     handleResize();
-
-    // cleanup on unmount
     return () => window.removeEventListener("resize", handleResize);
-  }, []); // initialise signature pad
+  }, [canvasSize.width]);
 
   useEffect(() => {
     if (canvasRef.current) {
       sigPadRef.current = new SignaturePad(canvasRef.current, {
         penColor: "#000",
         backgroundColor: "rgba(0,0,0,0)",
-        onBegin: () => {
-          setLeftMostX(null);
-        },
-        onEnd: () => {
-          //stroke finished
-        },
+        onBegin: () => {},
+        onEnd: () => {},
       });
+      const json = localStorage.getItem("savedSignature");
+      if (json) {
+        try {
+          const data = JSON.parse(json);
+          sigPadRef.current.fromData(data);
+          console.log("read saved data");
+        } catch {
+          console.warn("Invalid signature data in localStorage");
+        }
+      }
     }
   }, []); // Reinit on dimension changes
 
@@ -69,17 +91,29 @@ export default function SignaturePadComponent() {
       const rect = canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
       setLeftMostX((prev) => (prev !== null ? Math.min(prev, x) : x));
+      localStorage.setItem("leftMostX", JSON.stringify({ leftMostX }));
+    };
+    const localSave = () => {
+      localStorage.setItem(
+        "savedSignature",
+        JSON.stringify(sigPadRef.current!.toData()),
+      );
     };
     canvas.addEventListener("pointerdown", updateLeft);
     canvas.addEventListener("pointermove", updateLeft);
+    canvas.addEventListener("pointerup", localSave);
+    canvas.addEventListener("pointermove", localSave);
     return () => {
       canvas.removeEventListener("pointerdown", updateLeft);
       canvas.removeEventListener("pointermove", updateLeft);
+      canvas.removeEventListener("pointerup", localSave);
+      canvas.addEventListener("pointermove", localSave);
     };
-  }, []);
+  }, [leftMostX]);
 
   const clear = () => {
     sigPadRef.current?.clear();
+    localStorage.clear();
     setLeftMostX(null);
   };
 
@@ -98,7 +132,9 @@ export default function SignaturePadComponent() {
     ctx.fillStyle = "#000";
     ctx.font = "16px 'Playfair Display', monospace";
     ctx.textBaseline = "top";
-    const textX = leftMostX !== null ? leftMostX : 10;
+    const leftMostXJSON = localStorage.getItem("leftMostX");
+    const leftMostX = JSON.parse(leftMostXJSON!).leftMostX;
+    const textX = leftMostX !== null ? (leftMostX > 400 ? 300 : leftMostX) : 10;
     const startY = signatureCanvas.height + 10;
     ctx.fillText(`Signer Name: ${name}`, textX, startY);
     ctx.fillText(`Date signed: ${date}`, textX, startY + 20);
@@ -172,7 +208,7 @@ export default function SignaturePadComponent() {
               canvasSize.width > 600
                 ? 600
                 : canvasSize.width < 400
-                  ? 170
+                  ? Math.min(canvasSize.width - 50, 200)
                   : canvasSize.width
             }
             height={canvasSize.height}
