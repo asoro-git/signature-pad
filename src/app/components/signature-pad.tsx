@@ -14,8 +14,11 @@ export default function SignaturePadComponent() {
   const [name, setName] = useState("");
   // const [purpose, setPurpose] = useState("");
   const [clientName, setClientName] = useState("");
-  const [date, setDate] = useState(new Date(Date.now() - new Date().getTimezoneOffset()*60000)
-                    .toISOString().slice(0,10));
+  const [date, setDate] = useState(
+    new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+      .toISOString()
+      .slice(0, 10),
+  );
   const [leftMostX, setLeftMostX] = useState<number | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -83,6 +86,22 @@ export default function SignaturePadComponent() {
     }
   }, []); // Reinit on dimension changes
 
+  // mount stored file
+  useEffect(() => {
+    const json = localStorage.getItem("savedFile");
+    if (!json) return;
+
+    const { name, type, lastModified, dataUrl } = JSON.parse(json);
+
+    // Convert DataURL → Blob
+    fetch(dataUrl)
+      .then((res) => res.blob())
+      .then((blob) => {
+        //pass the original filename into File()
+        const restored = new File([blob], name, { type, lastModified });
+        setSelectedFile(restored);
+      });
+  }, []);
   // track pointer positions
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -156,6 +175,21 @@ export default function SignaturePadComponent() {
   const onFileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
     setSelectedFile(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        localStorage.setItem(
+          "savedFile",
+          JSON.stringify({
+            name: file.name,
+            type: file.type,
+            lastModified: file.lastModified,
+            dataUrl: reader.result, // this is the Base64 string
+          }),
+        );
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   // trigger the hidden input
@@ -186,7 +220,10 @@ export default function SignaturePadComponent() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center space-y-4 p-9" style={{ fontFamily: "'Playfair Display', monospace" }}>
+    <div
+      className="flex flex-col justify-center items-center space-y-4 p-9"
+      style={{ fontFamily: "'Playfair Display', monospace" }}
+    >
       <Card ref={cardRef} className="w-full max-w-3xl min-w-60 p-6">
         <CardHeader className="flex flex-col justify-center items-center">
           <CardTitle
@@ -289,9 +326,7 @@ export default function SignaturePadComponent() {
                 id="date"
                 type="date"
                 value={date}
-                onChange={(e) => setDate(
-                  e.target.value
-                )}
+                onChange={(e) => setDate(e.target.value)}
                 className="my-2"
               />
             </div>
@@ -300,7 +335,11 @@ export default function SignaturePadComponent() {
           {/* button to open file picker */}
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
             <div className="flex flex-col col-span-3">
-              <Button variant="default" onClick={openFilePicker}>
+              <Button
+                variant="default"
+                style={{ overflow: "hidden" }}
+                onClick={openFilePicker}
+              >
                 {selectedFile
                   ? selectedFile.name
                   : "Select Service Agreement (SA)"}
@@ -326,13 +365,15 @@ export default function SignaturePadComponent() {
         </CardContent>
       </Card>
       <div className="flex justify-center item-end h-full text-xs text-slate-400">
-        <div> © Copyright {new Date()
-.toLocaleString('en-AU',
-{
-  year: 'numeric',
-})} Stanley
-       </div>
+        <div>
+          {" "}
+          © Copyright{" "}
+          {new Date().toLocaleString("en-AU", {
+            year: "numeric",
+          })}{" "}
+          Stanley
+        </div>
       </div>
-     </div>
+    </div>
   );
 }
