@@ -133,7 +133,7 @@ export default function SignaturePadComponent() {
 
   const clear = () => {
     sigPadRef.current?.clear();
-    localStorage.clear();
+    localStorage.removeItem("savedSignature");
     setLeftMostX(null);
   };
 
@@ -217,6 +217,7 @@ export default function SignaturePadComponent() {
     a.download = `${date}_${name === clientName ? name : clientName === "" ? name : clientName}_signed service agreement.pdf`;
     a.click();
     URL.revokeObjectURL(url);
+    localStorage.removeItem("savedFile");
   };
 
   return (
