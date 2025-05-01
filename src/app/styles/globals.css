@@ -6,6 +6,10 @@
 :root {
   --background: #1a1a1a;
   --foreground: #f0f0f0;
+  -webkit-user-select: none; /* Safari, older Android */
+  -moz-user-select: none;    /* Firefox */
+  -ms-user-select: none;     /* IE */
+  user-select: none;    
 }
 
 .dark {
