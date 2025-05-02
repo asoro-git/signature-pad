@@ -9,4 +9,4 @@ package = "@netlify/plugin-nextjs"
 [[redirects]]
 from = "/"
 to = "/signpad/"
-status = 200
+status = 301
