@@ -46,11 +46,12 @@ export default function SignaturePadComponent() {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // responsive canvas sizing
-    const [canvasSize, setCanvasSize] = useState({ width: 600, height: 200 });
+    const [canvasSize, setCanvasSize] = useState({ width: 200, height: 200 });
 
     useEffect(() => {
         const calcWidth = () => Math.min(window.innerWidth * 0.8, 800);
         const onResize = () => setCanvasSize({ width: calcWidth(), height: 200 });
+        setCanvasSize({width: calcWidth(), height: 200})
         window.addEventListener("resize", onResize);
         return () => window.removeEventListener("resize", onResize);
     }, []);
@@ -185,7 +186,7 @@ export default function SignaturePadComponent() {
                                                 name="type"
                                                 render={({ field }) => (
                                                     <FormItem className="justify-center items-center flex flex-wrap space-x-6">
-                                                        <FormLabel className="border-r-2 p-4 border-blue-500 space-x-6">
+                                                        <FormLabel className="p-4 space-x-6">
                                                             Who are you signing the form for?
                                                         </FormLabel>
                                                         <RadioGroup
@@ -232,7 +233,7 @@ export default function SignaturePadComponent() {
                                             className={`h-full m-auto grid max-w-3xl min-w-sm sm:grid-cols01 gap-4`}
                                         >
                                             <div
-                                                className={`${representingOpt === "myself" ? "col-span-2" : ""}`}
+                                                className=`col-span-2`
                                             >
                                                 <Label htmlFor="name">Signer Name</Label>
                                                 <Input
@@ -264,7 +265,7 @@ export default function SignaturePadComponent() {
                                                 />
                                             </div>
                                             {representingOpt === "someone-else" && (
-                                                <div>
+                                                <div className="col-span-2">
                                                     <Label htmlFor="clientName">
                                                         Who are you representing?
                                                     </Label>
