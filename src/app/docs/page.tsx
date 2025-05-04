@@ -46,10 +46,10 @@ export default function SignaturePadComponent() {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // responsive canvas sizing
-    const calcWidth = () => Math.min(window.innerWidth * 0.8, 800);
-    const [canvasSize, setCanvasSize] = useState({ width: calcWidth(), height: 200 });
+    const [canvasSize, setCanvasSize] = useState({ width: 600, height: 200 });
 
     useEffect(() => {
+        const calcWidth = () => Math.min(window.innerWidth * 0.8, 800);
         const onResize = () => setCanvasSize({ width: calcWidth(), height: 200 });
         window.addEventListener("resize", onResize);
         return () => window.removeEventListener("resize", onResize);
