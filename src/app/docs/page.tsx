@@ -51,7 +51,7 @@ export default function SignaturePadComponent() {
     useEffect(() => {
         const calcWidth = () => Math.min(window.innerWidth * 0.8, 800);
         const onResize = () => setCanvasSize({ width: calcWidth(), height: 200 });
-        setCanvasSize({width: calcWidth(), height: 200})
+        setCanvasSize({ width: calcWidth(), height: 200 });
         window.addEventListener("resize", onResize);
         return () => window.removeEventListener("resize", onResize);
     }, []);
@@ -230,11 +230,9 @@ export default function SignaturePadComponent() {
                                 {representingOpt && (
                                     <div className="flex flex-col justify-center items-center">
                                         <div
-                                            className={`h-full m-auto grid max-w-3xl min-w-sm sm:grid-cols01 gap-4`}
+                                            className={`h-full m-auto grid max-w-3xl min-w-sm sm:grid-cols-1 gap-4`}
                                         >
-                                            <div
-                                                className="col-span-2"
-                                            >
+                                            <div className="col-span-2">
                                                 <Label htmlFor="name">Signer Name</Label>
                                                 <Input
                                                     id="name"
