@@ -233,7 +233,7 @@ export default function SignaturePadComponent() {
                                             className={`h-full m-auto grid max-w-3xl min-w-sm sm:grid-cols01 gap-4`}
                                         >
                                             <div
-                                                className=`col-span-2`
+                                                className="col-span-2"
                                             >
                                                 <Label htmlFor="name">Signer Name</Label>
                                                 <Input
