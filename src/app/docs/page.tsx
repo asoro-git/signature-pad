@@ -130,7 +130,7 @@ export default function SignaturePadComponent() {
 
     return (
         <div className={`${poppins.className}  p-6 font-sans`}>
-            <Card className="w-auto h-auto shadow-lg" style={{ minHeight: "80vh" }}>
+            <Card className="w-auto h-auto shadow-lg" style={{ minHeight: "60vh" }}>
                 <div>
                     <CardHeader className="flex justify-between items-center">
                         <CardTitle className="text-2xl font-semibold">
