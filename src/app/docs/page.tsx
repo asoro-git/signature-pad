@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { FileText } from "lucide-react"; // or your fave icon lib
 import SignaturePad from "signature_pad";
 import { Poppins } from "next/font/google";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -131,6 +132,30 @@ export default function SignaturePadComponent() {
         }
     }
 
+    const [dragActive, setDragActive] = useState(false);
+
+    const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.type === "dragenter" || e.type === "dragover") {
+            setDragActive(true);
+        } else if (e.type === "dragleave") {
+            setDragActive(false);
+        }
+    };
+
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragActive(false);
+        const file = e.dataTransfer.files?.[0] || null;
+        if (file) {
+            setSelectedFile(file);
+            setStep(2);
+            setHighest((prev) => Math.max(prev, 2));
+        }
+    };
+
     return (
         <div className={`${poppins.className}  p-6 font-sans`}>
             <Card className="w-auto h-auto shadow-lg" style={{ minHeight: "60vh" }}>
@@ -160,27 +185,79 @@ export default function SignaturePadComponent() {
                 <div className="flex flex-col w-full h-full justify-center items-center">
                     <CardContent className="w-auto">
                         {/* Step 1: Load PDF */}
+
                         {step === 1 && (
-                            <div className="text-center py-8">
-                                <p className="mb-4 text-gray-700">
-                                    Load your agreement to sign locally in browser.
+                            <div
+                                onDragEnter={handleDrag}
+                                onDragOver={handleDrag}
+                                onDragLeave={handleDrag}
+                                onDrop={handleDrop}
+                                onClick={openFilePicker}
+                                className={`
+      group relative flex flex-col justify-center items-center
+      w-full max-w-none
+      min-h-[220px] p-6
+      bg-white rounded-2xl shadow-md border-2 ring-4  ring-blue-400 ring-opacity-90
+      cursor-pointer transition-shadow duration-200 ease-out hover:shadow-lg
+
+      ${
+          dragActive
+              ? "ring-4 sm:ring-6 md:ring-8 ring-blue-600 ring-offset-4 ring-offset-white ring-opacity-90"
+              : "hover:ring-4 sm:hover:ring-6 md:hover:ring-8 hover:ring-blue-400 hover:ring-offset-4 hover:ring-offset-white hover:ring-opacity-75"
+      }
+    `}
+                            >
+                                <FileText
+                                    size={48}
+                                    className={`
+        mb-3 transition-colors duration-200
+        ${dragActive ? "text-blue-600" : "text-gray-300 group-hover:text-blue-400"}
+      `}
+                                />
+
+                                <p className="mb-4 text-lg font-medium text-center text-gray-700">
+                                    <b>Drag and Drop</b> your <b>Service Agreement</b> here to sign
                                 </p>
+
+                                <Button
+                                    variant="default"
+                                    className="
+        bg-blue-600 text-white 
+        hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 
+        px-8 py-3 rounded-md 
+        w-full sm:w-auto
+        transition-colors duration-200
+      "
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        openFilePicker();
+                                    }}
+                                >
+                                    Browse PDF
+                                </Button>
+
+                                <p className="text-center mt-3 text-sm text-gray-500">
+                                    or press button to load it here
+                                </p>
+
                                 <input
                                     ref={fileInputRef}
                                     type="file"
-                                    accept=".pdf  "
+                                    accept=".pdf"
                                     className="hidden"
                                     onChange={handleFileChange}
                                 />
-                                <Button onClick={openFilePicker} className="px-6">
-                                    Load PDF
-                                </Button>
                             </div>
                         )}
-
                         {/* Step 2: Info */}
+
                         {step === 2 && (
-                            <div className="flex flex-col justify-center space-y-6">
+                            <div
+                                className={`
+      group relative flex flex-col space-y-6 w-full max-w-none
+      bg-white p-6 rounded-2xl       
+    `}
+                            >
                                 <div className={`${representingOpt ? "text-gray-500" : ""}`}>
                                     <Form {...form}>
                                         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -231,10 +308,8 @@ export default function SignaturePadComponent() {
                                 </div>
 
                                 {representingOpt && (
-                                    <div className="flex flex-col justify-center items-center">
-                                        <div
-                                            className={`h-full max-w-3xl min-w-sm flex flex-col justify-center items-center gap-4`}
-                                        >
+                                    <div className="flex flex-col justify-center items-center w-full">
+                                        <div className="h-full max-w-3xl min-w-sm flex flex-col justify-center items-center gap-4 w-full">
                                             <div>
                                                 <Label htmlFor="name">
                                                     Tell me about your name?
