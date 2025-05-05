@@ -345,7 +345,7 @@ export default function SignaturePadComponent() {
                                             {representingOpt === "someone-else" && name && (
                                                 <div>
                                                     <Label htmlFor="clientName">
-                                                        Who are you signing for?
+                                                        Who are you signing the form for?
                                                     </Label>
                                                     <Input
                                                         id="clientName"
