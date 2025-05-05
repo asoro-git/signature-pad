@@ -144,7 +144,7 @@ export default function SignaturePadComponent() {
                             <button
                                 key={label}
                                 className={`flex-1 py-2 text-center border-b-2 font-medium text-gray-600
-                  ${step === idx + 1 ? "border-blue-500 text-blue-600" : "border-transparent hover:border-gray-300"}`}
+                   ${step > idx + 1 && highest > idx ? "border-gray-300" : ""} ${step === idx + 1 ? "border-blue-500 text-blue-600" : "border-transparent hover:border-gray-300"}`}
                                 onClick={() =>
                                     setStep((prev) => (highest >= idx + 1 ? idx + 1 : prev))
                                 }
@@ -230,10 +230,12 @@ export default function SignaturePadComponent() {
                                 {representingOpt && (
                                     <div className="flex flex-col justify-center items-center">
                                         <div
-                                            className={`h-full m-auto grid max-w-3xl min-w-sm sm:grid-cols-1 gap-4`}
+                                            className={`h-full max-w-3xl min-w-sm flex flex-col justify-center items-center gap-4`}
                                         >
-                                            <div className="col-span-2">
-                                                <Label htmlFor="name">Signer Name</Label>
+                                            <div>
+                                                <Label htmlFor="name">
+                                                    Tell me about your name?
+                                                </Label>
                                                 <Input
                                                     id="name"
                                                     value={name}
@@ -259,13 +261,13 @@ export default function SignaturePadComponent() {
                                                                 .join(" "),
                                                         )
                                                     }
-                                                    placeholder="Your name"
+                                                    placeholder="Enter your name"
                                                 />
                                             </div>
-                                            {representingOpt === "someone-else" && (
-                                                <div className="col-span-2">
+                                            {representingOpt === "someone-else" && name && (
+                                                <div>
                                                     <Label htmlFor="clientName">
-                                                        Who are you representing?
+                                                        Who are you signing for?
                                                     </Label>
                                                     <Input
                                                         id="clientName"
@@ -297,24 +299,41 @@ export default function SignaturePadComponent() {
                                                                     .join(" "),
                                                             )
                                                         }
-                                                        placeholder="Client name"
+                                                        placeholder="Enter the client name"
                                                     />
                                                 </div>
                                             )}
-                                            <div className="col-span-2">
-                                                <Label htmlFor="date">Date</Label>
-                                                <Input
-                                                    id="date"
-                                                    type="date"
-                                                    value={date}
-                                                    onChange={(e) => setDate(e.target.value)}
-                                                />
-                                            </div>
-                                            <div className="col-span-2 text-center">
+                                            {name && clientName && (
+                                                <div>
+                                                    <Label htmlFor="date">Sign Date</Label>
+                                                    <Input
+                                                        id="date"
+                                                        type="date"
+                                                        value={date}
+                                                        onChange={(e) => setDate(e.target.value)}
+                                                    />
+                                                </div>
+                                            )}
+                                            <div className="text-center">
                                                 <Button
                                                     onClick={() => setStep(3)}
-                                                    disabled={!name || !selectedFile}
-                                                    className="px-6"
+                                                    disabled={
+                                                        representingOpt === "someone-else"
+                                                            ? !clientName ||
+                                                              !name ||
+                                                              !selectedFile ||
+                                                              !date
+                                                            : !name || !selectedFile || !date
+                                                    }
+                                                    className={`px-6 ${
+                                                        representingOpt === "someone-else"
+                                                            ? clientName !== "" &&
+                                                              name !== "" &&
+                                                              !selectedFile &&
+                                                              !date &&
+                                                              "hidden"
+                                                            : !name && !selectedFile
+                                                    }`}
                                                 >
                                                     Go to Sign
                                                 </Button>
@@ -354,17 +373,28 @@ export default function SignaturePadComponent() {
                         {/* Step 4: Share */}
                         {step === 4 && (
                             <div className="space-y-4 text-center">
+                                <p className="text-center text-lg font-medium text-gray-700 text-wrap">
+                                    Press{" "}
+                                    <span className="border border-slate-500 rounded-sm bg-yellow-400">
+                                        button
+                                    </span>{" "}
+                                    below to{" "}
+                                    <span className="underline underline-offset-2">
+                                        download/ share
+                                    </span>{" "}
+                                    your signed document:
+                                </p>
+                                <Button onClick={handleShare} className="px-6 text-wrap h-auto">
+                                    Share or Download Your Signed PDF Form Below
+                                </Button>
                                 <iframe
                                     title="Signed PDF"
                                     src={signedPdfUrl || ""}
-                                    className="rounded shadow max-w-full"
+                                    className="rounded shadow max-w-full m-auto"
                                     style={{ minWidth: "50vw", minHeight: "60vh" }}
                                     loading="lazy"
                                     allowFullScreen
                                 />
-                                <Button onClick={handleShare} className="px-6">
-                                    Share or Download Your Signed PDF Form
-                                </Button>
                             </div>
                         )}
                     </CardContent>
