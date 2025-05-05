@@ -126,6 +126,9 @@ export default function SignaturePadComponent() {
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
         setRepresentingOpt(data.type);
+        if (representingOpt === "myself") {
+            setClientName(name);
+        }
     }
 
     return (
