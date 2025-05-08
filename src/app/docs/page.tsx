@@ -22,6 +22,8 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import LanguageSwitcher from "@/app/components/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 // Load modern font
 const poppins = Poppins({
@@ -31,6 +33,8 @@ const poppins = Poppins({
 });
 
 export default function SignaturePadComponent() {
+    const [languageChosen, setLanguageChosen] = useState(false);
+    const { t } = useTranslation("common");
     const [step, setStep] = useState(1);
     const [name, setName] = useState("");
     const [clientName, setClientName] = useState("");
@@ -155,24 +159,69 @@ export default function SignaturePadComponent() {
             setHighest((prev) => Math.max(prev, 2));
         }
     };
-
+    if (!languageChosen) {
+        return (
+            <div
+                className={`
+    ${poppins.className}
+    flex flex-col items-center justify-center
+    min-h-screen bg-gray-50 p-4
+  `}
+            >
+                <Card
+                    className="w-full max-w-md rounded-2xl shadow-xl overflow-auto"
+                    style={{ minWidth: "50vw" }}
+                >
+                    <CardContent className="flex flex-col items-center space-y-6 p-8 bg-white">
+                        <CardTitle className="text-2xl font-bold text-center">
+                            Select language <br /> Chọn ngôn ngữ <br />
+                            选择语言
+                            <br /> 選擇語言
+                        </CardTitle>
+                        <div className="w-full flex flex-col items-center justify-center">
+                            <LanguageSwitcher />
+                        </div>
+                        <Button
+                            className="w-1/3 py-3 text-base font-medium rounded-md"
+                            onClick={() => setLanguageChosen(true)}
+                        >
+                            {t("Continue")}
+                        </Button>
+                    </CardContent>
+                </Card>
+                <div className="items-center justify-center flex flex-col">
+                    <button
+                        onClick={() => window.location.reload()}
+                        className="underline text-sm text-gray-400 px-4 py-2 rounded"
+                    >
+                        {t("Didn't quite work out? Click/tap here to try again.")}
+                    </button>
+                </div>
+            </div>
+        );
+    }
     return (
-        <div className={`${poppins.className}  p-6 font-sans`}>
+        <div className={`${poppins.className} p-6 font-sans`}>
             <Card className="w-auto h-auto shadow-lg" style={{ minHeight: "60vh" }}>
                 <div>
                     <CardHeader className="flex justify-between items-center">
                         <CardTitle className="text-2xl font-semibold">
-                            Sign Service Agreement
+                            {t("Sign Service Agreement")}
                         </CardTitle>
-                        <ModeToggle />
+                        <LanguageSwitcher />
                     </CardHeader>
                     {/* Steps Nav */}
                     <div className="flex space-x-4 mb-6 p-6">
-                        {["Load", "Info", "Sign", "Share"].map((label, idx) => (
+                        {[t("Load"), t("Info"), t("Sign"), t("Share")].map((label, idx) => (
                             <button
                                 key={label}
                                 className={`flex-1 py-2 text-center border-b-2 font-medium text-gray-600
-                   ${step > idx + 1 && highest > idx ? "border-gray-300" : ""} ${step === idx + 1 ? "border-blue-500 text-blue-600" : "border-transparent hover:border-gray-300"}`}
+                  ${step > idx + 1 && highest > idx ? "border-gray-300" : ""}
+                  ${
+                      step === idx + 1
+                          ? "border-blue-500 text-blue-600"
+                          : "border-transparent hover:border-gray-300"
+                  }`}
                                 onClick={() =>
                                     setStep((prev) => (highest >= idx + 1 ? idx + 1 : prev))
                                 }
@@ -185,7 +234,6 @@ export default function SignaturePadComponent() {
                 <div className="flex flex-col w-full h-full justify-center items-center">
                     <CardContent className="w-auto">
                         {/* Step 1: Load PDF */}
-
                         {step === 1 && (
                             <div
                                 onDragEnter={handleDrag}
@@ -197,9 +245,8 @@ export default function SignaturePadComponent() {
       group relative flex flex-col justify-center items-center
       w-full max-w-none
       min-h-[220px] p-6
-      bg-white rounded-2xl shadow-md border-2 ring-4  ring-blue-400 ring-opacity-90
+      bg-white rounded-2xl shadow-md border-2 ring-4 ring-blue-400 ring-opacity-90
       cursor-pointer transition-shadow duration-200 ease-out hover:shadow-lg
-
       ${
           dragActive
               ? "ring-4 sm:ring-6 md:ring-8 ring-blue-600 ring-offset-4 ring-offset-white ring-opacity-90"
@@ -216,7 +263,8 @@ export default function SignaturePadComponent() {
                                 />
 
                                 <p className="mb-4 text-lg font-medium text-center text-gray-700">
-                                    <b>Drag and Drop</b> your <b>Service Agreement</b> here to sign
+                                    <b>{t("Drag and Drop")}</b> {t("your")}{" "}
+                                    <b>{t("Service Agreement")}</b> {t("here to sign")}
                                 </p>
 
                                 <Button
@@ -233,11 +281,11 @@ export default function SignaturePadComponent() {
                                         openFilePicker();
                                     }}
                                 >
-                                    Browse PDF
+                                    {t("Browse PDF")}
                                 </Button>
 
                                 <p className="text-center mt-3 text-sm text-gray-500">
-                                    or press button to load it here
+                                    {t("or press button to load it here")}
                                 </p>
 
                                 <input
@@ -267,7 +315,7 @@ export default function SignaturePadComponent() {
                                                 render={({ field }) => (
                                                     <FormItem className="justify-center items-center flex flex-wrap space-x-6">
                                                         <FormLabel className="p-4 space-x-6">
-                                                            Who are you signing the form for?
+                                                            {t("Who are you signing the form for?")}
                                                         </FormLabel>
                                                         <RadioGroup
                                                             onValueChange={field.onChange}
@@ -278,7 +326,7 @@ export default function SignaturePadComponent() {
                                                                     <RadioGroupItem value="myself" />
                                                                 </FormControl>
                                                                 <FormLabel>
-                                                                    I am signing for myself
+                                                                    {t("I am signing for myself")}
                                                                 </FormLabel>
                                                             </FormItem>
                                                             <FormItem className="space-x-2">
@@ -286,7 +334,9 @@ export default function SignaturePadComponent() {
                                                                     <RadioGroupItem value="someone-else" />
                                                                 </FormControl>
                                                                 <FormLabel>
-                                                                    {`I am representing someone else`}
+                                                                    {t(
+                                                                        "I am representing someone else",
+                                                                    )}
                                                                 </FormLabel>
                                                             </FormItem>
                                                         </RadioGroup>
@@ -300,7 +350,7 @@ export default function SignaturePadComponent() {
                                                     variant={`${representingOpt ? "outline" : "default"}`}
                                                     className="mt-4"
                                                 >
-                                                    Continue
+                                                    {t("Continue")}
                                                 </Button>
                                             </div>
                                         </form>
@@ -312,7 +362,7 @@ export default function SignaturePadComponent() {
                                         <div className="h-full max-w-3xl min-w-sm flex flex-col justify-center items-center gap-4 w-full">
                                             <div>
                                                 <Label htmlFor="name">
-                                                    Tell me about your name?
+                                                    {t("Tell me about your name?")}
                                                 </Label>
                                                 <Input
                                                     id="name"
@@ -339,13 +389,13 @@ export default function SignaturePadComponent() {
                                                                 .join(" "),
                                                         )
                                                     }
-                                                    placeholder="Enter your name"
+                                                    placeholder={t("Enter your name")}
                                                 />
                                             </div>
                                             {representingOpt === "someone-else" && name && (
                                                 <div>
                                                     <Label htmlFor="clientName">
-                                                        Who are you signing the form for?
+                                                        {t("Who are you signing the form for?")}
                                                     </Label>
                                                     <Input
                                                         id="clientName"
@@ -377,13 +427,13 @@ export default function SignaturePadComponent() {
                                                                     .join(" "),
                                                             )
                                                         }
-                                                        placeholder="Enter the client name"
+                                                        placeholder={t("Enter the client name")}
                                                     />
                                                 </div>
                                             )}
                                             {name && clientName && (
                                                 <div>
-                                                    <Label htmlFor="date">Sign Date</Label>
+                                                    <Label htmlFor="date">{t("Sign Date")}</Label>
                                                     <Input
                                                         id="date"
                                                         type="date"
@@ -403,17 +453,9 @@ export default function SignaturePadComponent() {
                                                               !date
                                                             : !name || !selectedFile || !date
                                                     }
-                                                    className={`px-6 ${
-                                                        representingOpt === "someone-else"
-                                                            ? clientName !== "" &&
-                                                              name !== "" &&
-                                                              !selectedFile &&
-                                                              !date &&
-                                                              "hidden"
-                                                            : !name && !selectedFile
-                                                    }`}
+                                                    className="px-6"
                                                 >
-                                                    Go to Sign
+                                                    {t("Go to Sign")}
                                                 </Button>
                                             </div>
                                         </div>
@@ -426,7 +468,7 @@ export default function SignaturePadComponent() {
                         {step === 3 && (
                             <div className="space-y-4 text-center">
                                 <p className="text-center text-lg font-medium text-gray-700">
-                                    Please sign below:
+                                    {t("Please sign below")}:
                                 </p>
                                 <canvas
                                     ref={canvasRef}
@@ -435,14 +477,9 @@ export default function SignaturePadComponent() {
                                     className="m-auto border rounded"
                                 />
                                 <div className="flex justify-center space-x-4">
-                                    <Button
-                                        variant="outline"
-                                        onClick={() => sigPadRef.current?.clear()}
-                                    >
-                                        Clear
-                                    </Button>
+                                    <Button variant="outline">{t("Clear")}</Button>
                                     <Button onClick={onStampClick} className="px-6">
-                                        Sign the document
+                                        {t("Sign the document")}
                                     </Button>
                                 </div>
                             </div>
@@ -452,21 +489,21 @@ export default function SignaturePadComponent() {
                         {step === 4 && (
                             <div className="space-y-4 text-center">
                                 <p className="text-center text-lg font-medium text-gray-700 text-wrap">
-                                    Press{" "}
+                                    {t("Press")}{" "}
                                     <span className="border border-slate-500 rounded-sm bg-yellow-400">
-                                        button
+                                        {t("button")}
                                     </span>{" "}
-                                    below to{" "}
+                                    {t("below to")}{" "}
                                     <span className="underline underline-offset-2">
-                                        download/ share
+                                        {t("download/ share")}
                                     </span>{" "}
-                                    your signed document:
+                                    {t("your signed document:")}
                                 </p>
                                 <Button onClick={handleShare} className="px-6 text-wrap h-auto">
-                                    Share or Download Your Signed PDF Form Below
+                                    {t("Share or Download Your Signed PDF Form Below")}
                                 </Button>
                                 <iframe
-                                    title="Signed PDF"
+                                    title={t("Signed PDF")}
                                     src={signedPdfUrl || ""}
                                     className="rounded shadow max-w-full m-auto"
                                     style={{ minWidth: "50vw", minHeight: "60vh" }}
@@ -483,7 +520,7 @@ export default function SignaturePadComponent() {
                     onClick={() => window.location.reload()}
                     className="underline text-sm text-gray-400 px-4 py-2 rounded"
                 >
-                    {`Didn't quite work out? Click/tap here to try again.`}
+                    {t("Didn't quite work out? Click/tap here to try again.")}
                 </button>
             </div>
         </div>

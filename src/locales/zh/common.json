@@ -1,0 +1,42 @@
+{
+    "Sign Service Agreement": "签署服务协议",
+    "Load": "加载",
+    "Info": "信息",
+    "Sign": "签名",
+    "Share": "分享",
+
+    "Drag and Drop": "拖放",
+    "your": "您的",
+    "Service Agreement": "服务协议",
+    "here to sign": "到此处签署",
+
+    "Browse PDF": "浏览 PDF",
+    "or press button to load it here": "或点击按钮在此加载",
+
+    "Who are you signing the form for?": "您正在为谁签署此表格？",
+    "I am signing for myself": "我为自己签署",
+    "I am representing someone else": "我代表他人签署",
+    "Continue": "继续",
+
+    "Tell me your name": "请以英文告诉我您的姓名",
+    "Enter your name": "请输入您的姓名（请使用英文）",
+    "Enter the client’s name": "请输入客户的姓名（请使用英文）",
+
+    "Sign Date": "签署日期",
+    "Go to Sign": "前往签署",
+
+    "Please sign below": "请在下方签名",
+    "Clear": "清除",
+    "Sign the document": "签署文件",
+
+    "Press": "按",
+    "button": "按钮",
+    "below to": "在下方",
+    "download/ share": "下载/分享",
+    "your signed document:": "您已签署的文件：",
+
+    "Share or Download Your Signed PDF Form Below": "在下方分享或下载您已签署的 PDF 表单",
+
+    "Didn't quite work out? Click/tap here to try again.": "未成功？点击/轻触此处重试",
+    "Tap here.": "轻触此处"
+}
