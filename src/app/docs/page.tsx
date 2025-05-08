@@ -474,7 +474,7 @@ export default function SignaturePadComponent() {
                                     className="m-auto border rounded"
                                 />
                                 <div className="flex justify-center space-x-4">
-                                    <Button variant="outline">{t("Clear")}</Button>
+                                    <Button variant="outline" onClick={() => sigPadRef.current?.clear()}>{t("Clear")}</Button>
                                     <Button onClick={onStampClick} className="px-6">
                                         {t("Sign the document")}
                                     </Button>
