@@ -18,9 +18,9 @@
     "I am representing someone else": "我代表他人签署",
     "Continue": "继续",
 
-    "Tell me your name": "请以英文告诉我您的姓名",
+    "What is your name?": "请以英文告诉我您的姓名",
     "Enter your name": "请输入您的姓名（请使用英文）",
-    "Enter the client’s name": "请输入客户的姓名（请使用英文）",
+    "Enter the client name": "请输入客户的姓名（请使用英文）",
 
     "Sign Date": "签署日期",
     "Go to Sign": "前往签署",
@@ -31,11 +31,11 @@
 
     "Press": "按",
     "button": "按钮",
-    "below to": "在下方",
+    "below to": "",
     "download/ share": "下载/分享",
     "your signed document:": "您已签署的文件：",
 
-    "Share or Download Your Signed PDF Form Below": "在下方分享或下载您已签署的 PDF 表单",
+    "Share or Download Your Signed PDF Form Below": "按此按钮下载或分享您已签署的文件",
 
     "Didn't quite work out? Click/tap here to try again.": "未成功？点击/轻触此处重试",
     "Tap here.": "轻触此处"

@@ -216,11 +216,10 @@ export default function SignaturePadComponent() {
                                 key={label}
                                 className={`flex-1 py-2 text-center border-b-2 font-medium text-gray-600
                   ${step > idx + 1 && highest > idx ? "border-gray-300" : ""}
-                  ${
-                      step === idx + 1
-                          ? "border-blue-500 text-blue-600"
-                          : "border-transparent hover:border-gray-300"
-                  }`}
+                  ${step === idx + 1
+                                        ? "border-blue-500 text-blue-600"
+                                        : "border-transparent hover:border-gray-300"
+                                    }`}
                                 onClick={() =>
                                     setStep((prev) => (highest >= idx + 1 ? idx + 1 : prev))
                                 }
@@ -246,11 +245,10 @@ export default function SignaturePadComponent() {
       min-h-[220px] p-6
       bg-white rounded-2xl shadow-md border-2 ring-4 ring-blue-400 ring-opacity-90
       cursor-pointer transition-shadow duration-200 ease-out hover:shadow-lg
-      ${
-          dragActive
-              ? "ring-4 sm:ring-6 md:ring-8 ring-blue-600 ring-offset-4 ring-offset-white ring-opacity-90"
-              : "hover:ring-4 sm:hover:ring-6 md:hover:ring-8 hover:ring-blue-400 hover:ring-offset-4 hover:ring-offset-white hover:ring-opacity-75"
-      }
+      ${dragActive
+                                        ? "ring-4 sm:ring-6 md:ring-8 ring-blue-600 ring-offset-4 ring-offset-white ring-opacity-90"
+                                        : "hover:ring-4 sm:hover:ring-6 md:hover:ring-8 hover:ring-blue-400 hover:ring-offset-4 hover:ring-offset-white hover:ring-opacity-75"
+                                    }
     `}
                             >
                                 <FileText
@@ -359,9 +357,9 @@ export default function SignaturePadComponent() {
                                 {representingOpt && (
                                     <div className="flex flex-col justify-center items-center w-full">
                                         <div className="h-full max-w-3xl min-w-sm flex flex-col justify-center items-center gap-4 w-full">
-                                            <div>
+                                            <div className="w-2/3">
                                                 <Label htmlFor="name">
-                                                    {t("Tell me about your name?")}
+                                                    {t("What is your name?")}
                                                 </Label>
                                                 <Input
                                                     id="name"
@@ -376,11 +374,11 @@ export default function SignaturePadComponent() {
                                                                         .map((part) =>
                                                                             /^[a-zA-Z]/.test(part)
                                                                                 ? part
-                                                                                      .slice(0, 1)
-                                                                                      .toUpperCase() +
-                                                                                  part
-                                                                                      .slice(1)
-                                                                                      .toLowerCase()
+                                                                                    .slice(0, 1)
+                                                                                    .toUpperCase() +
+                                                                                part
+                                                                                    .slice(1)
+                                                                                    .toLowerCase()
                                                                                 : part,
                                                                         )
                                                                         .join(""),
@@ -392,7 +390,7 @@ export default function SignaturePadComponent() {
                                                 />
                                             </div>
                                             {representingOpt === "someone-else" && name && (
-                                                <div>
+                                                <div className="w-2/3">
                                                     <Label htmlFor="clientName">
                                                         {t("Who are you signing the form for?")}
                                                     </Label>
@@ -411,14 +409,14 @@ export default function SignaturePadComponent() {
                                                                                     part,
                                                                                 )
                                                                                     ? part
-                                                                                          .slice(
-                                                                                              0,
-                                                                                              1,
-                                                                                          )
-                                                                                          .toUpperCase() +
-                                                                                      part
-                                                                                          .slice(1)
-                                                                                          .toLowerCase()
+                                                                                        .slice(
+                                                                                            0,
+                                                                                            1,
+                                                                                        )
+                                                                                        .toUpperCase() +
+                                                                                    part
+                                                                                        .slice(1)
+                                                                                        .toLowerCase()
                                                                                     : part,
                                                                             )
                                                                             .join(""),
@@ -447,9 +445,9 @@ export default function SignaturePadComponent() {
                                                     disabled={
                                                         representingOpt === "someone-else"
                                                             ? !clientName ||
-                                                              !name ||
-                                                              !selectedFile ||
-                                                              !date
+                                                            !name ||
+                                                            !selectedFile ||
+                                                            !date
                                                             : !name || !selectedFile || !date
                                                     }
                                                     className="px-6"
