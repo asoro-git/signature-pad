@@ -216,10 +216,11 @@ export default function SignaturePadComponent() {
                                 key={label}
                                 className={`flex-1 py-2 text-center border-b-2 font-medium text-gray-600
                   ${step > idx + 1 && highest > idx ? "border-gray-300" : ""}
-                  ${step === idx + 1
-                                        ? "border-blue-500 text-blue-600"
-                                        : "border-transparent hover:border-gray-300"
-                                    }`}
+                  ${
+                      step === idx + 1
+                          ? "border-blue-500 text-blue-600"
+                          : "border-transparent hover:border-gray-300"
+                  }`}
                                 onClick={() =>
                                     setStep((prev) => (highest >= idx + 1 ? idx + 1 : prev))
                                 }
@@ -245,10 +246,11 @@ export default function SignaturePadComponent() {
       min-h-[220px] p-6
       bg-white rounded-2xl shadow-md border-2 ring-4 ring-blue-400 ring-opacity-90
       cursor-pointer transition-shadow duration-200 ease-out hover:shadow-lg
-      ${dragActive
-                                        ? "ring-4 sm:ring-6 md:ring-8 ring-blue-600 ring-offset-4 ring-offset-white ring-opacity-90"
-                                        : "hover:ring-4 sm:hover:ring-6 md:hover:ring-8 hover:ring-blue-400 hover:ring-offset-4 hover:ring-offset-white hover:ring-opacity-75"
-                                    }
+      ${
+          dragActive
+              ? "ring-4 sm:ring-6 md:ring-8 ring-blue-600 ring-offset-4 ring-offset-white ring-opacity-90"
+              : "hover:ring-4 sm:hover:ring-6 md:hover:ring-8 hover:ring-blue-400 hover:ring-offset-4 hover:ring-offset-white hover:ring-opacity-75"
+      }
     `}
                             >
                                 <FileText
@@ -374,11 +376,11 @@ export default function SignaturePadComponent() {
                                                                         .map((part) =>
                                                                             /^[a-zA-Z]/.test(part)
                                                                                 ? part
-                                                                                    .slice(0, 1)
-                                                                                    .toUpperCase() +
-                                                                                part
-                                                                                    .slice(1)
-                                                                                    .toLowerCase()
+                                                                                      .slice(0, 1)
+                                                                                      .toUpperCase() +
+                                                                                  part
+                                                                                      .slice(1)
+                                                                                      .toLowerCase()
                                                                                 : part,
                                                                         )
                                                                         .join(""),
@@ -409,14 +411,14 @@ export default function SignaturePadComponent() {
                                                                                     part,
                                                                                 )
                                                                                     ? part
-                                                                                        .slice(
-                                                                                            0,
-                                                                                            1,
-                                                                                        )
-                                                                                        .toUpperCase() +
-                                                                                    part
-                                                                                        .slice(1)
-                                                                                        .toLowerCase()
+                                                                                          .slice(
+                                                                                              0,
+                                                                                              1,
+                                                                                          )
+                                                                                          .toUpperCase() +
+                                                                                      part
+                                                                                          .slice(1)
+                                                                                          .toLowerCase()
                                                                                     : part,
                                                                             )
                                                                             .join(""),
@@ -445,9 +447,9 @@ export default function SignaturePadComponent() {
                                                     disabled={
                                                         representingOpt === "someone-else"
                                                             ? !clientName ||
-                                                            !name ||
-                                                            !selectedFile ||
-                                                            !date
+                                                              !name ||
+                                                              !selectedFile ||
+                                                              !date
                                                             : !name || !selectedFile || !date
                                                     }
                                                     className="px-6"
@@ -474,7 +476,12 @@ export default function SignaturePadComponent() {
                                     className="m-auto border rounded"
                                 />
                                 <div className="flex justify-center space-x-4">
-                                    <Button variant="outline" onClick={() => sigPadRef.current?.clear()}>{t("Clear")}</Button>
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => sigPadRef.current?.clear()}
+                                    >
+                                        {t("Clear")}
+                                    </Button>
                                     <Button onClick={onStampClick} className="px-6">
                                         {t("Sign the document")}
                                     </Button>
@@ -484,7 +491,7 @@ export default function SignaturePadComponent() {
 
                         {/* Step 4: Share */}
                         {step === 4 && (
-                            <div className="space-y-4 text-center">
+                            <div className="space-y-4 text-center flex flex-wrap flex-col justify-center items-center">
                                 <p className="text-center text-lg font-medium text-gray-700 text-wrap">
                                     {t("Press")}{" "}
                                     <span className="border border-slate-500 rounded-sm bg-yellow-400">
@@ -496,9 +503,14 @@ export default function SignaturePadComponent() {
                                     </span>{" "}
                                     {t("your signed document:")}
                                 </p>
-                                <Button onClick={handleShare} className="px-6 text-wrap h-auto">
-                                    {t("Share or Download Your Signed PDF Form Below")}
-                                </Button>
+                                <div>
+                                    <Button
+                                        onClick={handleShare}
+                                        className="whitespace-normal px-6 h-auto"
+                                    >
+                                        {t("Share or Download Your Signed PDF Form Below")}
+                                    </Button>
+                                </div>
                                 <iframe
                                     title={t("Signed PDF")}
                                     src={signedPdfUrl || ""}

@@ -14,13 +14,13 @@ export default function LanguageButtons() {
     const { t, i18n } = useTranslation("common");
 
     return (
-        <div role="group" aria-label={t("Select language")} className="flex flex-wrap gap-2">
+        <div role="group" aria-label={t("Select language")} className="grid grid-cols-4 gap-2">
             {locales.map(({ code, label }) => (
                 <button
                     key={code}
                     onClick={() => i18n.changeLanguage(code)}
                     className={`
-            px-4 py-2 rounded-md font-medium transition
+            px-4 py-2 rounded-md w-full break-words xl:col-span-1 col-span-2 font-medium transition
             ${
                 i18n.language === code
                     ? "bg-blue-600 text-white"
